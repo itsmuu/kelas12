@@ -11,10 +11,8 @@ class AppNavbar extends HTMLElement {
         this.innerHTML = `
         <style>
             :host {
-                position: fixed;
+                position: sticky;
                 top: 0;
-                left: 0;
-                right: 0;
                 z-index: 1000;
                 display: block;
             }
@@ -26,7 +24,6 @@ class AppNavbar extends HTMLElement {
                 border-bottom: 1px solid var(--border-color);
                 padding: 0 24px;
                 transition: background-color 0.3s ease, border-color 0.3s ease;
-                width: 100%;
             }
 
             .nav-container {
@@ -156,26 +153,6 @@ class AppNavbar extends HTMLElement {
         `;
 
         this.initThemeToggle();
-
-        // Atur tinggi navbar secara dinamis agar padding-top main selalu sesuai
-        const updateNavbarHeight = () => {
-            const nav = this.querySelector('.navbar');
-            if (!nav) return;
-            const h = nav.getBoundingClientRect().height;
-            // Set CSS variable --navbar-height sehingga style.css dapat menggunakannya
-            document.documentElement.style.setProperty('--navbar-height', `${h}px`);
-
-            // Pastikan main punya padding-top yang cukup agar konten tidak tertutup
-            const mainEl = document.querySelector('main');
-            if (mainEl) {
-                // tambahkan 40px ekstra agar jarak atas tetap konsisten dengan desain
-                mainEl.style.paddingTop = `calc(${h}px + 40px)`;
-            }
-        };
-
-        // Jalankan sekarang dan juga saat jendela diubah ukuran
-        updateNavbarHeight();
-        window.addEventListener('resize', updateNavbarHeight);
     }
 
     initThemeToggle() {
