@@ -219,24 +219,24 @@
                 </h2>
 
                 <div class="note-callout">
-                    <strong>CATATAN PENTING:</strong> Ganti variabel <span class="ui-path">xx</span> pada seluruh IP Address dengan <strong>Nomor Absen Siswa</strong>. (Contoh: Absen 05 → <span class="value-badge">172.32.5.1/24</span>)[cite: 11].
+                    <strong>CATATAN PENTING:</strong> Ganti variabel <span class="ui-path">xx</span> pada seluruh IP Address dengan <strong>Nomor Absen Siswa</strong>. (Contoh: Absen 05 → <span class="value-badge">172.32.5.1/24</span>).
                 </div>
 
-                <!-- Langkah 5 PDF -->
+                <!-- Langkah 5 -->
                 <div class="step-card">
                     <div class="step-header">Langkah 5: Konfigurasi Internet (ether3) & Routing Default</div>
                     <ol class="step-list">
                         <li>
-                            <strong>IP Address:</strong> Buka <span class="ui-path">IP → Addresses</span> → Klik <strong>+</strong>[cite: 11]. Isi <strong>Address</strong>: <span class="value-badge">[IP_ISP]/[Prefix]</span> | <strong>Interface</strong>: <span class="ui-path">ether3</span> → <strong>OK</strong>[cite: 11].
+                            <strong>IP Address:</strong> Buka <span class="ui-path">IP → Addresses</span> → Klik <strong>+</strong>. Isi <strong>Address</strong>: <span class="value-badge">[IP_ISP]/[Prefix]</span> | <strong>Interface</strong>: <span class="ui-path">ether3</span> → <strong>OK</strong>.
                         </li>
                         <li>
-                            <strong>Gateway:</strong> Buka <span class="ui-path">IP → Routes</span> → Klik <strong>+</strong>[cite: 11]. Isi <strong>Dst. Address</strong>: <span class="value-badge">0.0.0.0/0</span> | <strong>Gateway</strong>: <span class="value-badge">[IP_Gateway_ISP]</span> → <strong>OK</strong>[cite: 11].
+                            <strong>Gateway:</strong> Buka <span class="ui-path">IP → Routes</span> → Klik <strong>+</strong>. Isi <strong>Dst. Address</strong>: <span class="value-badge">0.0.0.0/0</span> | <strong>Gateway</strong>: <span class="value-badge">[IP_Gateway_ISP]</span> → <strong>OK</strong>.
                         </li>
                         <li>
-                            <strong>NAT Masquerade:</strong> Buka <span class="ui-path">IP → Firewall → NAT</span> → Klik <strong>+</strong>[cite: 11].
+                            <strong>NAT Masquerade:</strong> Buka <span class="ui-path">IP → Firewall → NAT</span> → Klik <strong>+</strong>.
                             <ul class="sub-step-list">
-                                <li>Tab <strong>General</strong>: <strong>Chain</strong>: <span class="ui-path">srcnat</span> | <strong>Out. Interface</strong>: <span class="ui-path">ether3</span>[cite: 11].</li>
-                                <li>Tab <strong>Action</strong>: <strong>Action</strong>: <span class="ui-path">masquerade</span> → <strong>OK</strong>[cite: 11].</li>
+                                <li>Tab <strong>General</strong>: <strong>Chain</strong>: <span class="ui-path">srcnat</span> | <strong>Out. Interface</strong>: <span class="ui-path">ether3</span>.</li>
+                                <li>Tab <strong>Action</strong>: <strong>Action</strong>: <span class="ui-path">masquerade</span> → <strong>OK</strong>.</li>
                             </ul>
                         </li>
                     </ol>
