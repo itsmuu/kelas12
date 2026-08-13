@@ -1,13 +1,34 @@
 :root {
     --bg-color: #f8fafc;
-    --navbar-bg: #ffffff;
+    --navbar-bg: rgba(255, 255, 255, 0.85);
     --card-bg: #ffffff;
     --text-primary: #0f172a;
     --text-secondary: #64748b;
     --accent-blue: #0284c7;
-    --border-color: #f1f5f9;
+    --border-color: #e2e8f0;
     --shadow-sm: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
     --shadow-hover: 0 12px 25px -5px rgba(0, 0, 0, 0.08);
+    --step-bg: #f8fafc;
+    --ui-path-bg: #f1f5f9;
+    --ui-path-border: #cbd5e1;
+    --ui-path-text: #0f172a;
+}
+
+/* Skema Warna Dark Mode */
+[data-theme="dark"] {
+    --bg-color: #0f172a;
+    --navbar-bg: rgba(15, 23, 42, 0.85);
+    --card-bg: #1e293b;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --accent-blue: #38bdf8;
+    --border-color: #334155;
+    --shadow-sm: 0 4px 20px -2px rgba(0, 0, 0, 0.3);
+    --shadow-hover: 0 12px 25px -5px rgba(0, 0, 0, 0.5);
+    --step-bg: #0f172a;
+    --ui-path-bg: #334155;
+    --ui-path-border: #475569;
+    --ui-path-text: #f8fafc;
 }
 
 * {
@@ -23,91 +44,30 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Header / Navbar */
-header {
-    background-color: var(--navbar-bg);
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 40px;
-    border-bottom: 1px solid var(--border-color);
+/* Web Component Host Navbar (Sticky) */
+app-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: block;
 }
 
-.logo-icon {
-    width: 42px;
-    height: 42px;
-    background-color: #e0f2fe;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--accent-blue);
-    cursor: pointer;
-}
-
-nav {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-}
-
-nav a {
-    text-decoration: none;
-    color: var(--text-secondary);
-    font-weight: 500;
-    font-size: 14px;
-    transition: color 0.2s;
-}
-
-nav a.active, nav a:hover {
-    color: var(--accent-blue);
-}
-
-.nav-dropdown {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    cursor: pointer;
-    color: var(--text-secondary);
-    font-weight: 500;
-    font-size: 14px;
-}
-
-.theme-toggle {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: 1.5px solid #cbd5e1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: #334155;
-    background: transparent;
-    transition: all 0.2s;
-    margin-left: 8px;
-}
-
-.theme-toggle:hover {
-    border-color: var(--accent-blue);
-    color: var(--accent-blue);
-}
-
-/* Main Area */
+/* Main Area Container */
 main {
     flex: 1;
-    max-width: 1200px;
+    max-width: 1100px;
     width: 100%;
     margin: 0 auto;
-    padding: 60px 20px;
+    padding: 40px 20px 60px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
+/* Grid Layout Beranda */
 .grid-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -115,14 +75,14 @@ main {
     width: 100%;
 }
 
-/* Card Box Styles */
+/* Card Styles */
 .card {
     background-color: var(--card-bg);
     border-radius: 16px;
     padding: 36px 24px;
     text-align: center;
     box-shadow: var(--shadow-sm);
-    border: 1px solid rgba(226, 232, 240, 0.7);
+    border: 1px solid var(--border-color);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
@@ -134,13 +94,13 @@ main {
 .card:hover {
     transform: translateY(-6px);
     box-shadow: var(--shadow-hover);
-    border-color: #bae6fd;
+    border-color: var(--accent-blue);
 }
 
 .icon-circle {
     width: 72px;
     height: 72px;
-    background-color: #f0f9ff;
+    background-color: rgba(2, 132, 199, 0.1);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -151,7 +111,7 @@ main {
 }
 
 .card:hover .icon-circle {
-    background-color: #e0f2fe;
+    background-color: rgba(2, 132, 199, 0.2);
 }
 
 .card h3 {
@@ -167,20 +127,35 @@ main {
     line-height: 1.5;
 }
 
-/* Footer */
+/* Adjustments untuk Komponen Modul saat Dark Mode */
+.step-card {
+    background-color: var(--step-bg) !important;
+    border-color: var(--border-color) !important;
+}
+
+.ui-path {
+    background-color: var(--ui-path-bg) !important;
+    border-color: var(--ui-path-border) !important;
+    color: var(--ui-path-text) !important;
+}
+
+/* Footer Global */
 footer {
     text-align: center;
     padding: 24px;
     color: var(--text-secondary);
     font-size: 13px;
     border-top: 1px solid var(--border-color);
-    background-color: var(--navbar-bg);
+    background-color: var(--card-bg);
+    margin-top: auto;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 footer span.heart {
     color: #ef4444;
 }
 
+/* Responsive */
 @media (max-width: 1024px) {
     .grid-container {
         grid-template-columns: repeat(2, 1fr);
@@ -188,11 +163,8 @@ footer span.heart {
 }
 
 @media (max-width: 640px) {
-    header {
-        padding: 0 16px;
-    }
-    nav {
-        display: none;
+    main {
+        padding: 30px 16px;
     }
     .grid-container {
         grid-template-columns: 1fr;
