@@ -156,6 +156,26 @@ class AppNavbar extends HTMLElement {
         `;
 
         this.initThemeToggle();
+
+        // Atur tinggi navbar secara dinamis agar padding-top main selalu sesuai
+        const updateNavbarHeight = () => {
+            const nav = this.querySelector('.navbar');
+            if (!nav) return;
+            const h = nav.getBoundingClientRect().height;
+            // Set CSS variable --navbar-height sehingga style.css dapat menggunakannya
+            document.documentElement.style.setProperty('--navbar-height', `${h}px`);
+
+            // Pastikan main punya padding-top yang cukup agar konten tidak tertutup
+            const mainEl = document.querySelector('main');
+            if (mainEl) {
+                // tambahkan 40px ekstra agar jarak atas tetap konsisten dengan desain
+                mainEl.style.paddingTop = `calc(${h}px + 40px)`;
+            }
+        };
+
+        // Jalankan sekarang dan juga saat jendela diubah ukuran
+        updateNavbarHeight();
+        window.addEventListener('resize', updateNavbarHeight);
     }
 
     initThemeToggle() {
