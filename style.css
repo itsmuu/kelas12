@@ -69,6 +69,11 @@
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+html, body {
+    width: 100%;
+    overflow-x: hidden; /* Mencegah geser horizontal berlebih di HP */
+}
+
 body {
     background-color: var(--bg-color);
     color: var(--text-primary);
@@ -99,8 +104,8 @@ main {
     padding: 40px 20px;
     display: flex;
     flex-direction: column;
-    align-items: center;     /* Mengetengahkan secara horizontal */
-    justify-content: center;/* Mengetengahkan secara vertikal */
+    align-items: center;
+    justify-content: center;
 }
 
 /* ==========================================================================
@@ -204,6 +209,7 @@ main {
     font-weight: 700;
     color: var(--text-primary);
     margin-bottom: 8px;
+    word-break: break-word;
 }
 
 .module-desc {
@@ -297,26 +303,26 @@ main {
 }
 
 /* UI Badges & Formatting */
-.ui-path {
-    background-color: var(--ui-path-bg);
-    border: 1px solid var(--ui-path-border);
-    color: var(--ui-path-text);
+.ui-path, .value-badge {
+    display: inline-block;
     padding: 2px 6px;
     border-radius: 4px;
     font-family: monospace;
     font-size: 13px;
     font-weight: 600;
+    word-break: break-all; /* Agar IP address panjang tidak overflow */
+}
+
+.ui-path {
+    background-color: var(--ui-path-bg);
+    border: 1px solid var(--ui-path-border);
+    color: var(--ui-path-text);
 }
 
 .value-badge {
     background-color: var(--value-badge-bg);
     border: 1px solid var(--value-badge-border);
     color: var(--value-badge-text);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-family: monospace;
-    font-size: 13px;
-    font-weight: 600;
 }
 
 .note-callout {
@@ -327,6 +333,7 @@ main {
     border-radius: 0 8px 8px 0;
     font-size: 13px;
     margin-bottom: 20px;
+    line-height: 1.5;
 }
 
 /* ==========================================================================
@@ -334,7 +341,7 @@ main {
    ========================================================================== */
 footer {
     text-align: center;
-    padding: 24px;
+    padding: 20px 16px;
     color: var(--text-secondary);
     font-size: 13px;
     border-top: 1px solid var(--border-color);
@@ -348,28 +355,85 @@ footer span.heart {
 }
 
 /* ==========================================================================
-   8. RESPONSIVE MEDIA QUERIES
+   8. RESPONSIVE MEDIA QUERIES (OPTIMASI UNTUK HP & TABLET)
    ========================================================================== */
+
+/* Tablet (Max 1024px) */
 @media (max-width: 1024px) {
     .grid-container {
         grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
     }
 }
 
-@media (max-width: 640px) {
+/* HP & Layar Kecil (Max 768px) */
+@media (max-width: 768px) {
     main {
-        padding: 30px 16px;
+        padding: 24px 16px;
+        justify-content: flex-start; /* Agar konten panjang di HP scroll natural */
     }
 
     .grid-container {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr; /* 1 Kolom penuh untuk HP */
+        gap: 16px;
+    }
+
+    .card {
+        padding: 24px 18px; /* Mengurangi padding kartu agar pas di HP */
+    }
+
+    .icon-circle {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 14px;
+    }
+
+    .icon-circle svg {
+        width: 28px;
+        height: 28px;
     }
 
     .module-header, .section-box {
-        padding: 20px;
+        padding: 20px 16px;
+        border-radius: 12px;
     }
 
     .module-title {
         font-size: 22px;
+    }
+
+    .section-title {
+        font-size: 18px;
+    }
+
+    .step-card {
+        padding: 16px 12px;
+    }
+
+    .step-list {
+        padding-left: 16px; /* Indentasi lebih kecil agar teks tidak terjepit */
+    }
+
+    .content-container {
+        gap: 20px;
+    }
+}
+
+/* HP Layar Sangat Kecil (Max 480px) */
+@media (max-width: 480px) {
+    main {
+        padding: 16px 12px;
+    }
+
+    .card h3 {
+        font-size: 16px;
+    }
+
+    .card p {
+        font-size: 12px;
+    }
+
+    .module-title {
+        font-size: 20px;
     }
 }
