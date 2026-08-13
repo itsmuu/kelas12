@@ -2,11 +2,10 @@ class AppNavbar extends HTMLElement {
     connectedCallback() {
         const currentPath = window.location.pathname.split('/').pop() || 'index.html';
         
-        // Ambil tema awal dari localStorage atau preferensi sistem
+        // Ambil tema dari localStorage atau preferensi sistem
         const savedTheme = localStorage.getItem('theme') || 
             (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         
-        // Terapkan tema pada elemen <html>
         document.documentElement.setAttribute('data-theme', savedTheme);
 
         this.innerHTML = `
@@ -43,19 +42,27 @@ class AppNavbar extends HTMLElement {
                 text-decoration: none;
                 display: flex;
                 align-items: center;
-                gap: 10px;
+                gap: 12px;
                 letter-spacing: -0.3px;
             }
 
-            .brand-badge {
-                background: linear-gradient(135deg, #0284c7, #2563eb);
-                color: #ffffff;
-                font-size: 11px;
-                font-weight: 700;
-                padding: 3px 8px;
-                border-radius: 6px;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
+            /* Container Icon Sesuai Gambar */
+            .logo-icon {
+                width: 40px;
+                height: 40px;
+                background-color: #e0f2fe;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #0284c7;
+                flex-shrink: 0;
+                transition: background-color 0.3s ease, color 0.3s ease;
+            }
+
+            [data-theme="dark"] .logo-icon {
+                background-color: rgba(56, 189, 248, 0.15);
+                color: #38bdf8;
             }
 
             .nav-right {
@@ -93,7 +100,6 @@ class AppNavbar extends HTMLElement {
                 font-weight: 600;
             }
 
-            /* Tombol Toggle Theme */
             .theme-btn {
                 background: transparent;
                 border: 1px solid var(--border-color);
@@ -117,7 +123,15 @@ class AppNavbar extends HTMLElement {
         <nav class="navbar">
             <div class="nav-container">
                 <a href="index.html" class="brand">
-                    <span class="brand-badge">TKJ</span>
+                    <!-- Icon 4 Kotak Presisi Sesuai Gambar -->
+                    <div class="logo-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="7" height="7" rx="2"></rect>
+                            <rect x="14" y="3" width="7" height="7" rx="2"></rect>
+                            <rect x="14" y="14" width="7" height="7" rx="2"></rect>
+                            <rect x="3" y="14" width="7" height="7" rx="2"></rect>
+                        </svg>
+                    </div>
                     <span>Modul MikroTik</span>
                 </a>
                 
@@ -131,7 +145,6 @@ class AppNavbar extends HTMLElement {
                     </ul>
 
                     <button class="theme-btn" id="theme-toggle" title="Ubah Mode Tampilan">
-                        <!-- Icon SVG (Akan berganti via JS) -->
                         <span id="theme-icon"></span>
                     </button>
                 </div>
@@ -153,11 +166,9 @@ class AppNavbar extends HTMLElement {
             iconSpan.innerHTML = theme === 'dark' ? sunIcon : moonIcon;
         };
 
-        // Set ikon awal
         const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
         updateIcon(currentTheme);
 
-        // Event listener saat tombol diklik
         toggleBtn.addEventListener('click', () => {
             const activeTheme = document.documentElement.getAttribute('data-theme');
             const newTheme = activeTheme === 'dark' ? 'light' : 'dark';
