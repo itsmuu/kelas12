@@ -11,8 +11,8 @@
     --accent-blue: #0284c7;
     --border-color: #e2e8f0;
     
-    /* Layout */
-    --navbar-height: 64px; /* tinggi navbar, digunakan untuk offset konten saat navbar fixed */
+    /* NOTE: --navbar-height removed from :root so it only applies when explicitly set (e.g. for fixed navbar)
+       Use the fallback in calc(var(--navbar-height, 0px) + ... ) so sticky navbar doesn't add extra offset. */
     
     /* Module Specific - Light Theme */
     --badge-bg: #e0f2fe;
@@ -104,9 +104,8 @@ main {
     max-width: 1100px;
     width: 100%;
     margin: 0 auto;
-    /* tambahkan offset atas agar konten tidak tertutup navbar fixed
-       padding sebelumnya: 40px 20px */
-    padding: calc(var(--navbar-height) + 40px) 20px 40px 20px;
+    /* Use fallback: if --navbar-height is not set (sticky navbar) fallback to 0px */
+    padding: calc(var(--navbar-height, 0px) + 40px) 20px 40px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -374,7 +373,7 @@ footer span.heart {
 /* HP & Layar Kecil (Max 768px) */
 @media (max-width: 768px) {
     main {
-        padding: calc(var(--navbar-height) + 24px) 16px 24px 16px;
+        padding: calc(var(--navbar-height, 0px) + 24px) 16px 24px 16px;
         justify-content: flex-start; /* Agar konten panjang di HP scroll natural */
     }
 
@@ -427,7 +426,7 @@ footer span.heart {
 /* HP Layar Sangat Kecil (Max 480px) */
 @media (max-width: 480px) {
     main {
-        padding: calc(var(--navbar-height) + 16px) 12px 16px 12px;
+        padding: calc(var(--navbar-height, 0px) + 16px) 12px 16px 12px;
     }
 
     .card h3 {
@@ -438,7 +437,4 @@ footer span.heart {
         font-size: 12px;
     }
 
-    .module-title {
-        font-size: 20px;
-    }
-}
+The file content was truncated by the API response (large file).
