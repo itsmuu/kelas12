@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul 2: Konfigurasi Internet (ether3) & Routing Default</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Main Style CSS -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Dynamic Navbar Component -->
+    <script src="navbar.js" defer></script>
+
+    <style>
+        /* Styling Khusus Halaman Modul Materi */
+        .content-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .module-header {
+            background-color: var(--card-bg);
+            padding: 32px;
+            border-radius: 16px;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .module-badge {
+            display: inline-block;
+            background-color: #e0f2fe;
+            color: var(--accent-blue);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .module-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .module-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .section-box {
+            background-color: var(--card-bg);
+            padding: 32px;
+            border-radius: 16px;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 12px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Teori Items */
+        .theory-item {
+            margin-bottom: 20px;
+        }
+
+        .theory-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .theory-item h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin-bottom: 6px;
+        }
+
+        .theory-item p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Langkah Kerja Cards */
+        .step-card {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .step-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-header {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .step-list {
+            padding-left: 20px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .sub-step-list {
+            margin: 6px 0 6px 18px;
+            list-style-type: disc;
+        }
+
+        /* UI Badges & Formatting */
+        .ui-path {
+            background-color: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        .value-badge {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+            color: #166534;
+            font-weight: 600;
+        }
+
+        .note-callout {
+            background-color: #eff6ff;
+            border-left: 4px solid var(--accent-blue);
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            font-size: 13px;
+            color: #1e40af;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar Otomatis dari navbar.js -->
+    <app-navbar></app-navbar>
+
+    <!-- Main Content -->
+    <main>
+        <div class="content-container">
+            
+            <!-- Header Modul -->
+            <div class="module-header">
+                <span class="module-badge">Modul 02</span>
+                <h1 class="module-title">Konfigurasi Internet (ether3) & Routing Default</h1>
+                <p class="module-desc">
+                    Modul ini membahas langkah-langkah penghubungan router ke internet melalui interface ether3, penentuan jalur Default Gateway, serta aktivasi aturan NAT Masquerade.
+                </p>
+            </div>
+
+            <!-- BAGIAN A: LANDASAN TEORI -->
+            <div class="section-box">
+                <h2 class="section-title">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    A. Landasan Teori
+                </h2>
+
+                <div class="theory-item">
+                    <h4>1. IP Address Interface WAN (ether3)</h4>
+                    <p>
+                        Pengalamatan IP pada interface penghubung ISP (`ether3`) berfungsi agar router MikroTik memiliki identitas yang sah di segmen jaringan lokal milik provider/internet.
+                    </p>
+                </div>
+
+                <div class="theory-item">
+                    <h4>2. Default Gateway (0.0.0.0/0)</h4>
+                    <p>
+                        Default route dengan alamat tujuan <code>0.0.0.0/0</code> mengarahkan seluruh lalu lintas data yang tujuannya tidak diketahui di tabel routing lokal menuju router milik ISP (Gateway ISP).
+                    </p>
+                </div>
+
+                <div class="theory-item">
+                    <h4>3. NAT (Network Address Translation) Masquerade</h4>
+                    <p>
+                        Aturan NAT dengan aksi *Masquerade* berfungsi menerjemahkan alamat IP lokal privat menjadi IP publik `ether3` ketika data dikirim ke luar jaringan, sehingga jaringan lokal dapat terhubung ke internet.
+                    </p>
+                </div>
+            </div>
+
+            <!-- BAGIAN B: LANGKAH KERJA -->
+            <div class="section-box">
+                <h2 class="section-title">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                    B. Langkah Kerja Konfigurasi
+                </h2>
+
+                <div class="note-callout">
+                    <strong>CATATAN PENTING:</strong> Ganti variabel <span class="ui-path">xx</span> pada seluruh IP Address dengan <strong>Nomor Absen Siswa</strong>. (Contoh: Absen 05 → <span class="value-badge">172.32.5.1/24</span>)[cite: 11].
+                </div>
+
+                <!-- Langkah 5 PDF -->
+                <div class="step-card">
+                    <div class="step-header">Langkah 5: Konfigurasi Internet (ether3) & Routing Default</div>
+                    <ol class="step-list">
+                        <li>
+                            <strong>IP Address:</strong> Buka <span class="ui-path">IP → Addresses</span> → Klik <strong>+</strong>[cite: 11]. Isi <strong>Address</strong>: <span class="value-badge">[IP_ISP]/[Prefix]</span> | <strong>Interface</strong>: <span class="ui-path">ether3</span> → <strong>OK</strong>[cite: 11].
+                        </li>
+                        <li>
+                            <strong>Gateway:</strong> Buka <span class="ui-path">IP → Routes</span> → Klik <strong>+</strong>[cite: 11]. Isi <strong>Dst. Address</strong>: <span class="value-badge">0.0.0.0/0</span> | <strong>Gateway</strong>: <span class="value-badge">[IP_Gateway_ISP]</span> → <strong>OK</strong>[cite: 11].
+                        </li>
+                        <li>
+                            <strong>NAT Masquerade:</strong> Buka <span class="ui-path">IP → Firewall → NAT</span> → Klik <strong>+</strong>[cite: 11].
+                            <ul class="sub-step-list">
+                                <li>Tab <strong>General</strong>: <strong>Chain</strong>: <span class="ui-path">srcnat</span> | <strong>Out. Interface</strong>: <span class="ui-path">ether3</span>[cite: 11].</li>
+                                <li>Tab <strong>Action</strong>: <strong>Action</strong>: <span class="ui-path">masquerade</span> → <strong>OK</strong>[cite: 11].</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2026 Mugiyono. All Rights Reserved. | Created with <span class="heart">♥</span> for TKJ
+    </footer>
+
+</body>
+</html>
