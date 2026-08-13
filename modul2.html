@@ -162,6 +162,16 @@
             color: #1e40af;
             margin-bottom: 20px;
         }
+
+        .success-callout {
+            background-color: #f0fdf4;
+            border-left: 4px solid #22c55e;
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            font-size: 13px;
+            color: #166534;
+            margin-top: 16px;
+        }
     </style>
 </head>
 <body>
@@ -178,7 +188,7 @@
                 <span class="module-badge">Modul 02</span>
                 <h1 class="module-title">Konfigurasi Internet (ether3) & Routing Default</h1>
                 <p class="module-desc">
-                    Modul ini membahas langkah-langkah penghubungan router ke internet melalui interface ether3, penentuan jalur Default Gateway, serta aktivasi aturan NAT Masquerade.
+                    Modul ini membahas langkah-langkah penghubungan router ke internet melalui interface ether3 menggunakan DHCP Client, penentuan jalur Default Gateway secara otomatis, serta aktivasi aturan NAT Masquerade.
                 </p>
             </div>
 
@@ -190,23 +200,23 @@
                 </h2>
 
                 <div class="theory-item">
-                    <h4>1. IP Address Interface WAN (ether3)</h4>
+                    <h4>1. DHCP Client pada Interface WAN (ether3)</h4>
                     <p>
-                        Pengalamatan IP pada interface penghubung ISP (`ether3`) berfungsi agar router MikroTik memiliki identitas yang sah di segmen jaringan lokal milik provider/internet.
+                        DHCP Client berfungsi meminta konfigurasi IP address, subnet mask, default gateway, dan DNS server secara otomatis dari ISP (Internet Service Provider). Metode ini lebih praktis karena tidak memerlukan konfigurasi manual IP statis.
                     </p>
                 </div>
 
                 <div class="theory-item">
                     <h4>2. Default Gateway (0.0.0.0/0)</h4>
                     <p>
-                        Default route dengan alamat tujuan <code>0.0.0.0/0</code> mengarahkan seluruh lalu lintas data yang tujuannya tidak diketahui di tabel routing lokal menuju router milik ISP (Gateway ISP).
+                        Default route dengan alamat tujuan <code>0.0.0.0/0</code> mengarahkan seluruh lalu lintas data yang tujuannya tidak diketahui di tabel routing lokal menuju router milik ISP (Gateway ISP). Pada DHCP Client, gateway ini diperoleh secara otomatis.
                     </p>
                 </div>
 
                 <div class="theory-item">
                     <h4>3. NAT (Network Address Translation) Masquerade</h4>
                     <p>
-                        Aturan NAT dengan aksi *Masquerade* berfungsi menerjemahkan alamat IP lokal privat menjadi IP publik `ether3` ketika data dikirim ke luar jaringan, sehingga jaringan lokal dapat terhubung ke internet.
+                        Aturan NAT dengan aksi <em>Masquerade</em> berfungsi menerjemahkan alamat IP lokal privat menjadi IP publik yang didapat dari DHCP Client pada ether3 ketika data dikirim ke luar jaringan, sehingga jaringan lokal dapat terhubung ke internet.
                     </p>
                 </div>
             </div>
@@ -215,31 +225,83 @@
             <div class="section-box">
                 <h2 class="section-title">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-                    B. Langkah Kerja Konfigurasi
+                    B. Langkah Kerja Konfigurasi (Dinamis)
                 </h2>
 
                 <div class="note-callout">
-                    <strong>CATATAN PENTING:</strong> Ganti variabel <span class="ui-path">xx</span> pada seluruh IP Address dengan <strong>Nomor Absen Siswa</strong>. (Contoh: Absen 05 → <span class="value-badge">172.32.5.1/24</span>).
+                    <strong>METODE DINAMIS:</strong> Konfigurasi ini menggunakan DHCP Client sehingga seluruh pengaturan IP, Gateway, dan DNS diperoleh secara otomatis dari ISP. Tidak diperlukan pengaturan IP statis manual.
                 </div>
 
-                <!-- Langkah 5 -->
+                <!-- Langkah 5A: DHCP Client -->
                 <div class="step-card">
-                    <div class="step-header">Langkah 5: Konfigurasi Internet (ether3) & Routing Default</div>
+                    <div class="step-header">Langkah 5A: Konfigurasi DHCP Client pada ether3</div>
                     <ol class="step-list">
                         <li>
-                            <strong>IP Address:</strong> Buka <span class="ui-path">IP → Addresses</span> → Klik <strong>+</strong>. Isi <strong>Address</strong>: <span class="value-badge">[IP_ISP]/[Prefix]</span> | <strong>Interface</strong>: <span class="ui-path">ether3</span> → <strong>OK</strong>.
+                            Buka menu <span class="ui-path">IP → DHCP Client</span> → Klik tombol <strong>+</strong>.
                         </li>
                         <li>
-                            <strong>Gateway:</strong> Buka <span class="ui-path">IP → Routes</span> → Klik <strong>+</strong>. Isi <strong>Dst. Address</strong>: <span class="value-badge">0.0.0.0/0</span> | <strong>Gateway</strong>: <span class="value-badge">[IP_Gateway_ISP]</span> → <strong>OK</strong>.
-                        </li>
-                        <li>
-                            <strong>NAT Masquerade:</strong> Buka <span class="ui-path">IP → Firewall → NAT</span> → Klik <strong>+</strong>.
+                            Pada jendela yang muncul, isi konfigurasi berikut:
                             <ul class="sub-step-list">
-                                <li>Tab <strong>General</strong>: <strong>Chain</strong>: <span class="ui-path">srcnat</span> | <strong>Out. Interface</strong>: <span class="ui-path">ether3</span>.</li>
-                                <li>Tab <strong>Action</strong>: <strong>Action</strong>: <span class="ui-path">masquerade</span> → <strong>OK</strong>.</li>
+                                <li><strong>Interface</strong>: Pilih <span class="ui-path">ether3</span> (interface yang terhubung ke modem/ISP).</li>
+                                <li><strong>Use Peer DNS</strong>: <span class="value-badge">✓ Centang</span> (agar DNS dari ISP otomatis digunakan).</li>
+                                <li><strong>Add Default Route</strong>: <span class="value-badge">✓ Centang</span> (agar gateway default otomatis ditambahkan ke routing).</li>
                             </ul>
                         </li>
+                        <li>
+                            Klik <strong>OK</strong> untuk menyimpan konfigurasi.
+                        </li>
+                        <li>
+                            Tunggu beberapa saat hingga status berubah menjadi <span class="value-badge">bound</span> (berhasil mendapatkan IP dari ISP).
+                        </li>
                     </ol>
+                    <div class="success-callout">
+                        <strong>✓ INDIKASI BERHASIL:</strong> Pada daftar DHCP Client, akan muncul IP Address, Gateway, dan DNS Server yang diberikan oleh ISP secara otomatis.
+                    </div>
+                </div>
+
+                <!-- Langkah 5B: Verifikasi Routing -->
+                <div class="step-card">
+                    <div class="step-header">Langkah 5B: Verifikasi Default Route</div>
+                    <ol class="step-list">
+                        <li>
+                            Buka menu <span class="ui-path">IP → Routes</span> untuk memverifikasi rute default.
+                        </li>
+                        <li>
+                            Pastikan terdapat entri dengan <strong>Dst. Address</strong>: <span class="value-badge">0.0.0.0/0</span> dan <strong>Gateway</strong> terisi otomatis (biasanya berupa IP Gateway dari ISP).
+                        </li>
+                        <li>
+                            Perhatikan kolom <strong>Distance</strong> dan <strong>Gateway</strong> yang menunjukkan rute aktif dengan tanda <span class="ui-path">AS</span> (Active Static) atau <span class="ui-path">ADC</span> (Active Dynamic Connected).
+                        </li>
+                    </ol>
+                </div>
+
+                <!-- Langkah 5C: NAT Masquerade -->
+                <div class="step-card">
+                    <div class="step-header">Langkah 5C: Konfigurasi NAT Masquerade</div>
+                    <ol class="step-list">
+                        <li>
+                            Buka menu <span class="ui-path">IP → Firewall → NAT</span> → Klik tombol <strong>+</strong>.
+                        </li>
+                        <li>
+                            Pada tab <strong>General</strong>, isi:
+                            <ul class="sub-step-list">
+                                <li><strong>Chain</strong>: <span class="ui-path">srcnat</span></li>
+                                <li><strong>Out. Interface</strong>: <span class="ui-path">ether3</span> (interface WAN yang terhubung ke internet)</li>
+                            </ul>
+                        </li>
+                        <li>
+                            Pada tab <strong>Action</strong>, isi:
+                            <ul class="sub-step-list">
+                                <li><strong>Action</strong>: <span class="ui-path">masquerade</span></li>
+                            </ul>
+                        </li>
+                        <li>
+                            Klik <strong>OK</strong> untuk menyimpan aturan NAT.
+                        </li>
+                    </ol>
+                    <div class="success-callout">
+                        <strong>✓ SELESAI:</strong> Router sekarang telah terhubung ke internet secara dinamis melalui DHCP Client pada ether3 dan siap meneruskan koneksi internet ke jaringan lokal.
+                    </div>
                 </div>
 
             </div>
