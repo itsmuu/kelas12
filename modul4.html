@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modul 4: Firewall Filter Rules & Pemblokiran File</title>
+    <title>Modul 4: Firewall Filter Rules, Pemblokiran File & Web</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Main Style CSS -->
@@ -183,9 +183,9 @@
             <!-- Header Modul -->
             <div class="module-header">
                 <span class="module-badge">Modul 04</span>
-                <h1 class="module-title">Firewall Filter Rules & Pemblokiran File</h1>
+                <h1 class="module-title">Firewall Filter Rules, Pemblokiran File & Web</h1>
                 <p class="module-desc">
-                    Modul ini membahas pengamanan jaringan menggunakan Firewall Filter Rules pada MikroTik, meliputi pembatasan lalu lintas ICMP (Ping) ke router maupun antar-klien, serta berbagai metode pemblokiran unduhan file (.mp3) berbasis Layer7 Protocol, Firewall Content, dan Web Proxy.
+                    Modul ini membahas pengamanan jaringan menggunakan Firewall Filter Rules pada MikroTik, meliputi pembatasan lalu lintas ICMP (Ping) ke router maupun antar-klien, pemblokiran unduhan file (.mp3), serta pemblokiran situs web (seperti tkjapps.smksabdev.my.id) menggunakan TLS Host, Layer7 Protocol, dan Web Proxy.
                 </p>
             </div>
 
@@ -223,6 +223,18 @@
                         <li><strong>Layer7 Protocol:</strong> Menggunakan pencocokan pola ekspresi reguler (<em>Regular Expression / Regexp</em>) pada muatan paket data.</li>
                         <li><strong>Firewall Content:</strong> Memeriksa string teks tertentu (contoh: <code>.mp3</code>) pada header paket data HTTP secara lebih praktis dan ringan.</li>
                         <li><strong>Web Proxy Access:</strong> Memanfaatkan proxy internal MikroTik untuk memfilter permintaan URL/Path yang mengandung kata kunci file sebelum sampai ke klien.</li>
+                    </ul>
+                </div>
+
+                <div class="theory-item">
+                    <h4>4. Metode Pemblokiran Situs Web (Domain / URL)</h4>
+                    <p>
+                        Untuk memblokir akses ke situs web tertentu (contoh: <code>tkjapps.smksabdev.my.id</code>), terdapat beberapa metode yang dapat diterapkan:
+                    </p>
+                    <ul>
+                        <li><strong>TLS Host (Firewall Filter):</strong> Memeriksa header Server Name Indication (SNI) pada enkripsi HTTPS/TLS, sangat ampuh untuk memblokir domain modern berbasis HTTPS tanpa perlu mendekripsi paket data.</li>
+                        <li><strong>Layer7 Protocol (Regexp):</strong> Memeriksa nama domain pada header request menggunakan pencocokan pola string (Regular Expression).</li>
+                        <li><strong>Web Proxy Access (Dst. Host):</strong> Memanfaatkan fitur Web Proxy MikroTik untuk menyaring akses berdasarkan nama domain tujuan secara spesifik.</li>
                     </ul>
                 </div>
             </div>
@@ -354,6 +366,43 @@
                             <ul class="sub-step-list">
                                 <li>Tab <strong>General</strong>: Chain: <span class="ui-path">dstnat</span> | Protocol: <span class="ui-path">tcp</span> | Dst. Port: <span class="value-badge">80</span> | In. Interface: <span class="ui-path">ether4</span></li>
                                 <li>Tab <strong>Action</strong>: Action: <span class="ui-path">redirect</span> | To Ports: <span class="value-badge">8080</span> → Klik <strong>OK</strong>.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+
+                <!-- Langkah 11: Pemblokiran Situs Web -->
+                <div class="step-card">
+                    <div class="step-header">Langkah 11: Pemblokiran Situs Web (Contoh: tkjapps.smksabdev.my.id)</div>
+                    <ol class="step-list">
+                        <li>
+                            <strong>Metode 1: Menggunakan TLS Host (Sangat Ringan & Efektif HTTPS/HTTP)</strong>
+                            <ul class="sub-step-list">
+                                <li>Buka menu <span class="ui-path">IP → Firewall → Filter Rules</span> → Klik tombol <strong>+</strong>.</li>
+                                <li>Tab <strong>General</strong>: Chain: <span class="ui-path">forward</span> | Protocol: <span class="ui-path">tcp</span> | Dst. Port: <span class="value-badge">443,80</span></li>
+                                <li>Tab <strong>Advanced</strong>: TLS Host: <span class="value-badge">*tkjapps.smksabdev.my.id*</span></li>
+                                <li>Tab <strong>Action</strong>: Action: <span class="ui-path">drop</span> → Klik <strong>Apply</strong>, lalu <strong>OK</strong>.</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>Metode 2: Menggunakan Layer7 Protocol (Regexp Target Domain)</strong>
+                            <ul class="sub-step-list">
+                                <li>Buka <span class="ui-path">IP → Firewall → Layer7 Protocols</span> → Klik tombol <strong>+</strong>.</li>
+                                <li>Name: <span class="value-badge">block-web-tkjapps</span></li>
+                                <li>Regexp: <span class="value-badge">^.*(tkjapps\.smksabdev\.my\.id).*$</span> → Klik <strong>OK</strong>.</li>
+                                <li>Buka tab <span class="ui-path">Filter Rules</span> → Klik tombol <strong>+</strong>.</li>
+                                <li>Tab <strong>General</strong>: Chain: <span class="ui-path">forward</span> | Src. Address: <span class="value-badge">172.32.xx.0/24</span> | Protocol: <span class="ui-path">tcp</span></li>
+                                <li>Tab <strong>Advanced</strong>: Layer7 Protocol: <span class="ui-path">block-web-tkjapps</span></li>
+                                <li>Tab <strong>Action</strong>: Action: <span class="ui-path">drop</span> → Klik <strong>Apply</strong>, lalu <strong>OK</strong>.</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>Metode 3: Menggunakan Web Proxy Access (Untuk Protokol HTTP)</strong>
+                            <ul class="sub-step-list">
+                                <li>Pastikan Web Proxy sudah aktif (seperti pada Langkah Alternatif 3).</li>
+                                <li>Buka <span class="ui-path">IP → Web Proxy → Access</span> → Klik tombol <strong>+</strong>.</li>
+                                <li>Dst. Host: <span class="value-badge">*tkjapps.smksabdev.my.id*</span></li>
+                                <li>Action: <span class="ui-path">deny</span> → Klik <strong>Apply</strong>, lalu <strong>OK</strong>.</li>
                             </ul>
                         </li>
                     </ol>
