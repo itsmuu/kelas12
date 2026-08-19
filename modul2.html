@@ -267,10 +267,10 @@
                             Buka menu <span class="ui-path">IP → Routes</span> untuk memverifikasi rute default.
                         </li>
                         <li>
-                            Pastikan terdapat entri dengan <strong>Dst. Address</strong>: <span class="value-badge">0.0.0.0/0</span> dan <strong>Gateway</strong> terisi otomatis (biasanya berupa IP Gateway dari ISP).
+                            Pastikan terdapat entri otomatis dengan <strong>Dst. Address</strong>: <span class="value-badge">0.0.0.0/0</span> dan <strong>Gateway</strong> yang terisi IP Gateway dari ISP via <span class="ui-path">ether3</span>.
                         </li>
                         <li>
-                            Perhatikan kolom <strong>Distance</strong> dan <strong>Gateway</strong> yang menunjukkan rute aktif dengan tanda <span class="ui-path">AS</span> (Active Static) atau <span class="ui-path">ADC</span> (Active Dynamic Connected).
+                            Perhatikan *flag* di sebelah kiri entri tersebut yang bertuliskan <span class="ui-path">DA</span> atau <span class="ui-path">DAS</span> (<strong>D</strong>ynamic <strong>A**ctive **S**tatic / **D**ynamic **A**ctive), yang menandakan bahwa rute default ini ditambahkan secara **otomatis/dinamis** oleh sistem DHCP Client dan sedang aktif.
                         </li>
                     </ol>
                 </div>
